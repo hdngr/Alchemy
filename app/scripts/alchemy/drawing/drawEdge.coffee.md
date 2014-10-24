@@ -13,14 +13,15 @@
 
     # You should have received a copy of the GNU Affero General Public License
     # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    alchemy.drawing.DrawEdge =
+    
+    Alchemy::drawing.DrawEdge =
         createLink: (edge) =>
-            conf = alchemy.conf
+            debugger
+            conf = Alchemy.conf
             curved = conf.curvedEdges
             directed = conf.directedEdges
-            interactions = alchemy.interactions
-            utils = alchemy.drawing.EdgeUtils
+            interactions = Alchemy.interactions
+            utils = Alchemy.drawing.EdgeUtils
 
             edge.append 'path'
                 .attr 'class', 'edge-line'
@@ -32,9 +33,9 @@
                 .style 'stroke-width', "#{conf.edgeOverlayWidth}"
 
         styleLink: (edge) =>
-            conf = alchemy.conf
+            conf = Alchemy.conf
             directed = conf.directedEdges
-            utils = alchemy.drawing.EdgeUtils
+            utils = Alchemy.drawing.EdgeUtils
             edge.each (d) ->
                 edgeWalk = utils.edgeWalk d
                 g = d3.select(@)
@@ -69,8 +70,8 @@
                         
                         hyp = Math.sqrt( dx * dx + dy * dy)
 
-                        offsetX = (dx * alchemy.conf.nodeRadius + 2) / hyp
-                        offsetY = (dy * alchemy.conf.nodeRadius + 2) / hyp
+                        offsetX = (dx * Alchemy.conf.nodeRadius + 2) / hyp
+                        offsetY = (dy * Alchemy.conf.nodeRadius + 2) / hyp
 
                         arrowX = (-sideOfX * ( conf.edgeArrowSize )) + offsetX
                         arrowY = ( sideOfY * ( conf.edgeArrowSize )) + offsetY
@@ -104,10 +105,10 @@
             edge.classed 'active', true
 
         styleText: (edge) =>
-            conf = alchemy.conf
+            conf = Alchemy.conf
             curved = conf.curvedEdges
             directed = conf.directedEdges
-            utils = alchemy.drawing.EdgeUtils
+            utils = Alchemy.drawing.EdgeUtils
 
             if curved
                 edge.select 'text' 
@@ -148,10 +149,10 @@
             #           .attr "xlink:xlink:href", "#path-#{d.source.id}-#{d.target.id}"
 
         setInteractions: (edge) =>
-            interactions = alchemy.interactions
-            editorEnabled = alchemy.get.state("interactions") is "editor"
+            interactions = Alchemy.interactions
+            editorEnabled = Alchemy.get.state("interactions") is "editor"
             if editorEnabled
-                editorInteractions = new alchemy.editor.Interactions
+                editorInteractions = new Alchemy.editor.Interactions
                 edge.select '.edge-handler'
                     .on 'click', editorInteractions.edgeClick
             else

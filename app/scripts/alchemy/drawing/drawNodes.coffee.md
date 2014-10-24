@@ -14,16 +14,16 @@
     # You should have received a copy of the GNU Affero General Public License
     # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    alchemy.drawing.DrawNodes =
+    Alchemy.drawing.DrawNodes =
         createNode: (d3Nodes) ->
-            drawNode = alchemy.drawing.DrawNode
+            drawNode = Alchemy.drawing.DrawNode
 
-            # alchemyNode is an array of one or more alchemyNode._d3 packets
-            node = alchemy.vis.selectAll "g.node"
+            # AlchemyNode is an array of one or more AlchemyNode._d3 packets
+            node = Alchemy.vis.selectAll "g.node"
                             .data d3Nodes, (n) -> n.id
             node.enter().append "g"
                     .attr "class", (d) ->
-                        nodeType = alchemy._nodes[d.id]._nodeType
+                        nodeType = Alchemy._nodes[d.id]._nodeType
                         "node #{nodeType} active"
                     .attr 'id', (d) -> "node-#{d.id}"
                     .classed 'root', (d) -> d.root
@@ -34,10 +34,10 @@
             drawNode.setInteractions node
             node.exit().remove()
 
-        updateNode: (alchemyNode) ->
-            # alchemyNode is an array of one or more alchemyNode._d3 packets
-            drawNode = alchemy.drawing.DrawNode
-            node = alchemy.vis.select "#node-#{alchemyNode.id}"
+        updateNode: (AlchemyNode) ->
+            # AlchemyNode is an array of one or more AlchemyNode._d3 packets
+            drawNode = Alchemy.drawing.DrawNode
+            node = Alchemy.vis.select "#node-#{AlchemyNode.id}"
             drawNode.styleNode node
             drawNode.styleText node
             drawNode.setInteractions node

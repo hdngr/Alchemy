@@ -25,7 +25,8 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="alchemy" id="alchemy"></div>
+        <div class="alchemy" id="alchemy1"></div>
+        <div class="alchemy" id="alchemy2"></div>
 
         <!-- build:js({.tmp,app}) scripts/vendor.js -->
         <!-- bower:js -->
@@ -39,13 +40,21 @@
         <script src="scripts/alchemy.js"></script>
         <script src="scripts/else.js"></script>
         <script type="text/javascript">
-          var config = {
+          var config1 = {
             dataSource: 'sample_data/contrib.json',
             // curvedEdges: true,
-            directedEdges: true
+            directedEdges: true,
+            divSelector: '#alchemy1'
+          };
+          var config2 = {
+            dataSource: 'sample_data/contrib.json',
+            // curvedEdges: true,
+            directedEdges: true,
+            divSelector: '#alchemy2'
           };
 
-          alchemy.begin(config)
+          // alchemy1 = alchemy.begin(config1);
+          // alchemy2 = alchemy.begin(config2);
         </script>
     </body>
 </html>

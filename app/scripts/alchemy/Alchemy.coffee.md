@@ -4,7 +4,9 @@ position: 8
 title: Anotated Source
 ---
 -->
-
+    
+    root = exports ? this 
+    
     """
     Alchemy.js is a graph drawing application for the web.
     Copyright (C) 2014  GraphAlchemist, Inc.
@@ -25,16 +27,21 @@ title: Anotated Source
     """
 
     class Alchemy
-        constructor: () ->
+        @version = "#VERSION#"
+
+        constructor: (userConf=null) ->
+            alchemyInstance = @
+            @get = new @API.get(alchemyInstance)
+            @create = new @_create(alchemyInstance)
             # Alchemy houses a number modules that can be considered submodules
-            @version = "#VERSION#"
+            @userConf = null
             @layout = {}
             @interactions = {}
             @utils = {}
             @visControls = {}
             @styles = {}
-            @models = {}
-            @drawing = {}
+            # @models = {}
+            # @drawing = {}
             @editor = {}
             @log = {}
             @currentRelationshipTypes = {}
@@ -58,14 +65,18 @@ title: Anotated Source
             # is typically 1.
             @_edges = {}
 
+            if @userConf
+                @begin(@userConf)
+
+        drawing: {}
         begin: (userConf) =>
             # overide configuration with user inputs
             @setConf(userConf)
-
-            if typeof alchemy.conf.dataSource is 'string'
-                d3.json alchemy.conf.dataSource, alchemy.startGraph
-            else if typeof alchemy.conf.dataSource is 'object'
-                alchemy.startGraph alchemy.conf.dataSource
+            debugger
+            if typeof @conf.dataSource is 'string'
+                d3.json @conf.dataSource, @startGraph
+            else if typeof @conf.dataSource is 'object'
+                @startGraph @conf.dataSource
             @
 
         setConf: (userConf) -> 
@@ -82,10 +93,16 @@ title: Anotated Source
                 if key is "nodeColor"
                     userConf["nodeColour"] = value
 
-            @conf = _.merge alchemy.defaults, userConf
+            @conf = _.merge {}, alchemy.defaults, userConf
 
-        #API methods
+### Old API methods
+DEPRECATE in 1.0
+
         getNodes: (id, ids...) =>
+            console.warn("""
+                This method will be depricated in v1.0 release
+                Please use alchemy.get.nodes()
+                """)
             # returns one or more nodes as an array
             if ids
                 ids.push id
@@ -96,8 +113,14 @@ title: Anotated Source
                 results
             else
                 [@_nodes[id].properties]
+        
+DEPRECATE in 1.0
 
         getEdges: (id=null, target=null) =>
+            console.warn("""
+                This method will be deprecated in v1.0 release
+                Please use alchemy.get.edges()
+                """)
             # returns one or more edges as an array
             if id? and target?
                 edge_id = "#{id}-#{target}"
@@ -108,13 +131,49 @@ title: Anotated Source
                             if (edge.properties.source is id) or (edge.properties.target is id)
                                 edge.properties
                 _.compact results
+DEPRECATE in 1.0
+        
+        allNodes: => 
+            console.warn("""
+                This method will be depricated in v1.0 release
+                Please use alchemy.get.nodes()
+                """)
+            _.map @_nodes, (n) -> n.properties
 
-        allNodes: => _.map @_nodes, (n) -> n.properties
-        allEdges: => _.map @_edges, (e) -> e.properties
+DEPRECATE in 1.0
+
+        allEdges: => 
+            console.warn("""
+                This method will be deprecated in v1.0 release
+                Please use alchemy.get.allEdges()
+                """)
+            _.map @_edges, (e) -> e.properties
 
     currentRelationshipTypes = {}
 
+Restructure 1.0.  A better behavior would be to have:
+
+```
+alchemy1 = new Alchemy(someConf1);
+alchemy2 = new Alchemy(someOtherConf);
+```
+
+and then the API methods are called based off of the instance:
+
+```
+alchemy1.get.allNodes();
+alchemy2.get.allNodes();
+etc...
+```
+    Alchemy::API = {}
+    Alchemy::models = {}
+    Alchemy::drawing = {}
+
+
     if typeof module isnt 'undefined' and module.exports
-      module.exports = new Alchemy()
+        module.exports = new Alchemy()
     else
-      @alchemy = new Alchemy()
+        @alchemy = new Alchemy()
+        
+    root.Alchemy = Alchemy
+    

@@ -1,8 +1,8 @@
-    alchemy.utils.warnings = 
+    Alchemy.utils.warnings = 
         dataWarning: ->
-            if alchemy.conf.dataWarning and typeof alchemy.conf.dataWarning is 'function'
-                alchemy.conf.dataWarning()
-            else if alchemy.conf.dataWarning is 'default'
+            if Alchemy.conf.dataWarning and typeof Alchemy.conf.dataWarning is 'function'
+                Alchemy.conf.dataWarning()
+            else if Alchemy.conf.dataWarning is 'default'
                 no_results = """
                             <div class="modal fade" id="no-results">
                                 <div class="modal-dialog">
@@ -12,7 +12,7 @@
                                             <h4 class="modal-title">Sorry!</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <p>#{alchemy.conf.warningMessage}</p>
+                                            <p>#{Alchemy.conf.warningMessage}</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -27,5 +27,5 @@
             """
                 create an element that matches the value for 'divSelector' in your conf.
                 For instance, if you are using the default 'divSelector' conf, simply provide
-                <div id='#alchemy'></div>.
+                <div id='#Alchemy'></div>.
             """

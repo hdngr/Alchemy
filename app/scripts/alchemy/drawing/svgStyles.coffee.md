@@ -1,7 +1,7 @@
-    alchemy.svgStyles =
+    Alchemy.svgStyles =
         node:
             populate: (node) ->
-                conf = alchemy.conf
+                conf = Alchemy.conf
                 defaultStyle = _.omit conf.nodeStyle.all, "selected", "highlighted", "hidden"
                 d = node
 
@@ -34,7 +34,7 @@
 
         edge:
             populate: (edge) ->
-                conf = alchemy.conf
+                conf = Alchemy.conf
                 defaultStyle = _.omit conf.edgeStyle.all, "selected", "highlighted", "hidden"
 
                 # if user put in hard value, turn into a function
@@ -66,7 +66,7 @@
                 svgStyles
 
             update: (edge) ->
-                conf = alchemy.conf
+                conf = Alchemy.conf
                 style = edge._style
                 toFunc = (inp)->
                     if typeof inp is "function"

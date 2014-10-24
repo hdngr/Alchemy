@@ -1,11 +1,11 @@
-    class alchemy.models.Edge
+    class Alchemy.models.Edge
         # takes an edge property map from GraphJSON
         # as well as an index, which is the position of the edge map in
-        # the array of edges stored in alchemy._edges at each "source-target"
+        # the array of edges stored in Alchemy._edges at each "source-target"
         # this is used to create the id for the individual node which will be "source-target-index"
         # e.g. 1-0-1
         constructor: (edge, index=null) ->
-            a = alchemy
+            a = Alchemy
             conf = a.conf
             
             @id = @_setID edge
@@ -42,10 +42,10 @@
             if edgeCaption
                 @_d3.caption = edgeCaption
         _setEdgeType: ->
-            conf = alchemy.conf
+            conf = Alchemy.conf
             if conf.edgeTypes
                 if _.isPlainObject conf.edgeTypes
-                    lookup = Object.keys alchemy.conf.edgeTypes
+                    lookup = Object.keys Alchemy.conf.edgeTypes
                     edgeType = @_properties[lookup]
                 else if typeof conf.edgeTypes is 'string'
                     edgeType = @_properties[conf.edgeTypes]
@@ -56,12 +56,12 @@
         setProperties: (property, value=null) =>
             if _.isPlainObject property
                 _.assign @_properties, property
-                if 'source' of property then @_setD3Properties {'source': alchemy._nodes[property.source]._d3}
-                if 'target' of property then @_setD3Properties {'target': alchemy._nodes[property.target]._d3}
+                if 'source' of property then @_setD3Properties {'source': Alchemy._nodes[property.source]._d3}
+                if 'target' of property then @_setD3Properties {'target': Alchemy._nodes[property.target]._d3}
             else
                 @_properties[property] = value
                 if (property is 'source') or (property is 'target')
-                    @_setD3Properties {property: alchemy._nodes[value]._d3}
+                    @_setD3Properties {property: Alchemy._nodes[value]._d3}
             @
 
         getProperties: (key=null, keys...) =>
@@ -83,7 +83,7 @@
         setStyles: (key, value=null) ->
             # If undefined, set styles based on state
             if key is undefined
-                key = alchemy.svgStyles.edge.populate @
+                key = Alchemy.svgStyles.edge.populate @
 
             # takes a key, value or map of key values
             # the user passes a map of styles to set multiple styles at once
@@ -92,8 +92,8 @@
             else if typeof key is "string"
                 @_style[key] = value
 
-            @_setD3Properties alchemy.svgStyles.edge.update(@)
-            alchemy._drawEdges.updateEdge @_d3
+            @_setD3Properties Alchemy.svgStyles.edge.update(@)
+            Alchemy._drawEdges.updateEdge @_d3
             @
 
         toggleHidden: ()->
@@ -103,7 +103,7 @@
         # Find if both endpoints are active
         # there are probably better ways to do this
         allNodesActive: () =>
-            source = alchemy.vis.select "#node-#{@properties.source}"
-            target = alchemy.vis.select "#node-#{@properties.target}"
+            source = Alchemy.vis.select "#node-#{@properties.source}"
+            target = Alchemy.vis.select "#node-#{@properties.target}"
 
             !source.classed("inactive") && !target.classed("inactive")

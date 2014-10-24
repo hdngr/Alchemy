@@ -1,6 +1,6 @@
-    class alchemy.models.Node
+    class Alchemy.models.Node
         constructor: (node) ->
-            a = alchemy
+            a = Alchemy
             conf = a.conf
             
             @id = node.id
@@ -21,10 +21,10 @@
 
         # internal methods
         _setNodeType: =>
-            conf = alchemy.conf
+            conf = Alchemy.conf
             if conf.nodeTypes
                 if _.isPlainObject conf.nodeTypes
-                    lookup = Object.keys alchemy.conf.nodeTypes
+                    lookup = Object.keys Alchemy.conf.nodeTypes
                     types = _.values conf.nodeTypes
                     nodeType = @_properties[lookup]
                 else if typeof conf.nodeTypes is 'string'
@@ -73,15 +73,15 @@
         setStyles: (key, value=null) ->
             # If undefined, set styles based on state
             if key is undefined
-                key = alchemy.svgStyles.node.populate @
+                key = Alchemy.svgStyles.node.populate @
             # takes a key, value or map of key values
             # the user passes a map of styles to set multiple styles at once
             else if _.isPlainObject key
                 _.assign @_style, key
             else
                 @_style[key] = value
-            @_setD3Properties alchemy.svgStyles.node.populate @
-            alchemy._drawNodes.updateNode @_d3
+            @_setD3Properties Alchemy.svgStyles.node.populate @
+            Alchemy._drawNodes.updateNode @_d3
             @
 
         toggleHidden: ->
@@ -89,7 +89,7 @@
             @setStyles()
             _.each @._adjacentEdges, (id)-> 
                 [source, target, pos] = id.split("-")
-                alchemy._edges["#{source}-#{target}"][pos].toggleHidden()
+                Alchemy._edges["#{source}-#{target}"][pos].toggleHidden()
 
         # Convenience methods
         outDegree: () -> @_adjacentEdges.length

@@ -1,11 +1,11 @@
-    class alchemy.editor.Interactions
+    class Alchemy.editor.Interactions
         # @mouseUpNode = null
         # @sourceNode = null
         # @targetNode = null
         # @newEdge = null
         # @click = null
         constructor: ->
-            @editor = new alchemy.editor.Editor
+            @editor = new Alchemy.editor.Editor
 
         nodeMouseOver: (n) ->
             if !d3.select(@).select("circle").empty()
@@ -39,11 +39,11 @@
         nodeClick: (c) =>
             d3.event.stopPropagation()
             # select the correct nodes
-            if !alchemy.vis.select("#node-#{c.id}").empty()
-                selected = alchemy.vis
+            if !Alchemy.vis.select("#node-#{c.id}").empty()
+                selected = Alchemy.vis
                                   .select "#node-#{c.id}"
                                   .classed 'selected'
-                alchemy.vis
+                Alchemy.vis
                        .select "#node-#{c.id}"
                        .classed 'selected', !selected
             @editor.editorClear()
@@ -57,7 +57,7 @@
         addNodeStart: (d, i) =>
             d3.event.sourceEvent.stopPropagation()
             @sourceNode = d
-            alchemy.vis
+            Alchemy.vis
                 .select '#dragline'
                 .classed "hidden":false
             @
@@ -66,7 +66,7 @@
             # rework
             x2coord = d3.event.x
             y2coord = d3.event.y
-            alchemy.vis
+            Alchemy.vis
                 .select '#dragline'
                 .attr "x1", @sourceNode.x
                 .attr "y1", @sourceNode.y
@@ -80,7 +80,7 @@
             #we moused up on an existing (different) node
             if !@click 
                 if !@mouseUpNode
-                    dragline = alchemy.vis.select "#dragline"
+                    dragline = Alchemy.vis.select "#dragline"
                     targetX = dragline.attr "x2"
                     targetY = dragline.attr "y2"
 
@@ -96,7 +96,7 @@
                     target: @targetNode.id, 
                     caption: "edited"
 
-                alchemy.editor.update @targetNode, @newEdge
+                Alchemy.editor.update @targetNode, @newEdge
             
             @reset()
             @
@@ -106,7 +106,7 @@
                 when 8, 46
                     if !(d3.select(d3.event.target).node().tagName is ("INPUT" or "TEXTAREA"))
                         d3.event.preventDefault()
-                        alchemy.editor.remove()
+                        Alchemy.editor.remove()
 
         reset: =>
             # reset interaciton variables
@@ -117,7 +117,7 @@
             @click = null
 
             #reset dragline
-            alchemy.vis
+            Alchemy.vis
                 .select "#dragline"
                 .classed "hidden":true
                 .attr "x1", 0            

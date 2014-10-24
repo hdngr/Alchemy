@@ -14,12 +14,12 @@
     # You should have received a copy of the GNU Affero General Public License
     # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    class alchemy.editor.Editor
+    class Alchemy.editor.Editor
         constructor: ->
-            @utils = new alchemy.editor.Utils
+            @utils = new Alchemy.editor.Utils
 
         # init: =>
-        #     if alchemy.conf.showEditor is true
+        #     if Alchemy.conf.showEditor is true
         #         @showOptions()
         #         @nodeEditorInit()
         #         @edgeEditorInit()
@@ -53,9 +53,9 @@
                 """
 
         startEditor: =>
-            divSelector = alchemy.conf.divSelector
+            divSelector = Alchemy.conf.divSelector
             html = @editorContainerHTML
-            editor = alchemy.dash
+            editor = Alchemy.dash
                             .select "#control-dash"
                             .append "div"
                             .attr "id", "editor"
@@ -63,12 +63,12 @@
             
             editor.select '#editor-header'
                     .on 'click', () ->
-                        if alchemy.dash.select('#element-options').classed "in"
-                            alchemy.dash
+                        if Alchemy.dash.select('#element-options').classed "in"
+                            Alchemy.dash
                                    .select "#editor-header>span"
                                    .attr "class", "fa fa-2x fa-caret-right"
                         else
-                            alchemy.dash
+                            Alchemy.dash
                                    .select "#editor-header>span"
                                    .attr "class", "fa fa-2x fa-caret-down"   
 
@@ -76,32 +76,32 @@
                 .on 'click', ->
                     d3.select @
                       .attr "class", () ->
-                        if alchemy.get.state() is 'editor'
-                            alchemy.set.state 'interactions', 'default'
+                        if Alchemy.get.state() is 'editor'
+                            Alchemy.set.state 'interactions', 'default'
                             "inactive list-group-item"
                         else
-                            alchemy.set.state 'interactions', 'editor'
+                            Alchemy.set.state 'interactions', 'editor'
                             "active list-group-item"
                       .html ->
-                          if alchemy.get.state() is 'editor'
+                          if Alchemy.get.state() is 'editor'
                               """Disable Editor Interactions"""
                           else 
                               """Enable Editor Interactions"""
 
             editor.select "#element-options ul #remove"
-                  .on "click", -> alchemy.editor.remove()
+                  .on "click", -> Alchemy.editor.remove()
 
             utils = @utils
             
             editor_interactions.on "click", () -> 
-                    if !alchemy.dash.select("#editor-interactions").classed "active"
+                    if !Alchemy.dash.select("#editor-interactions").classed "active"
                         utils.enableEditor()
-                        alchemy.dash.select "#editor-interactions"
+                        Alchemy.dash.select "#editor-interactions"
                             .classed {"active": true, "inactive": false}
                             .html """Editor mode enabled, click to disable editor interactions"""
                     else 
                         utils.disableEditor()
-                        alchemy.dash
+                        Alchemy.dash
                             .select "#editor-interactions"
                             .classed {"active": false, "inactive": true}
                             .html """Editor mode disabled, click to enable editor interactions"""
@@ -144,8 +144,8 @@
         #                     .attr("placeholder", "select a node first")
                                 
         nodeEditor: (n) =>
-            divSelector = alchemy.conf.divSelector        
-            editor = alchemy.dash.select "#control-dash #editor"
+            divSelector = Alchemy.conf.divSelector        
+            editor = Alchemy.dash.select "#control-dash #editor"
             options = editor.select '#element-options'
             # options.html(html)
             html = @elementEditorHTML "Node"
@@ -154,7 +154,7 @@
                                     .html html
 
             elementEditor.attr "class", () ->
-                        active = alchemy.dash
+                        active = Alchemy.dash
                                         .select "#editor-interactions"
                                         .classed "active"
                         return "enabled" if active
@@ -168,25 +168,25 @@
                         .attr "placeholder", "New Property Value"
                         .attr "value", null
 
-            alchemy.dash
+            Alchemy.dash
                 .select "#add-property-form"
                 .on "submit", ->
                     event.preventDefault()
-                    key = alchemy.dash
+                    key = Alchemy.dash
                                  .select '#add-prop-key'
                                  .property 'value'
                     key = key.replace /\s/g, "_"
-                    value = alchemy.dash
+                    value = Alchemy.dash
                                    .select '#add-prop-value'
                                    .property 'value'
                     updateProperty key, value, true
-                    alchemy.dash
+                    Alchemy.dash
                            .selectAll "#add-property .edited-property"
                            .classed "edited-property":false
                     @reset()
 
-            nodeProperties = alchemy._nodes[n.id].getProperties()
-            alchemy.vis
+            nodeProperties = Alchemy._nodes[n.id].getProperties()
+            Alchemy.vis
                    .select "#node-#{n.id}"
                    .classed "editing":true
 
@@ -207,17 +207,17 @@
                                 .attr "class", "form-control property-value"
                                 .attr "value", "#{val}"
 
-            alchemy.dash
+            Alchemy.dash
                    .select "#properties-list"
                    .on "submit", -> 
                        event.preventDefault()
-                       properties = alchemy.dash.selectAll ".edited-property"
+                       properties = Alchemy.dash.selectAll ".edited-property"
                        for property in properties[0]
-                           selection = alchemy.dash.select property
+                           selection = Alchemy.dash.select property
                            key = selection.select("label").text()
                            value = selection.select("input").attr 'value'
                            updateProperty key, value, false
-                       alchemy.dash
+                       Alchemy.dash
                               .selectAll "#node-properties-list .edited-property"
                               .classed "edited-property":false
                        @.reset()
@@ -231,57 +231,57 @@
             updateProperty = (key, value, newProperty) ->
                 nodeID = n.id
                 if (key!="") and (value != "")
-                    alchemy._nodes[nodeID].setProperty "#{key}", "#{value}"
-                    drawNodes = alchemy._drawNodes
-                    drawNodes.updateNode alchemy.viz.select("#node-#{nodeID}")
+                    Alchemy._nodes[nodeID].setProperty "#{key}", "#{value}"
+                    drawNodes = Alchemy._drawNodes
+                    drawNodes.updateNode Alchemy.viz.select("#node-#{nodeID}")
                     if newProperty is true 
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#node-add-prop-key"
                                .attr "value", "property added/updated to key: #{key}"
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#node-add-prop-value"
                                .attr "value", "property at #{key} updated to: #{value}"
                     else
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#node-#{key}-input"
                                .attr "value", "property at #{key} updated to: #{value}"
 
                 else
                     if newProperty is true 
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#node-add-prop-key"
                                .attr "value", "null or invalid input"
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#node-add-prop-value"
                                .attr "value", "null or invlid input"
                     else
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#node-#{key}-input"
                                .attr "value", "null or invalid input"
                 
         editorClear: () ->
-            alchemy.dash
+            Alchemy.dash
                    .selectAll ".node"
                    .classed "editing":false
-            alchemy.dash
+            Alchemy.dash
                    .selectAll ".edge"
                    .classed "editing":false
-            alchemy.dash
+            Alchemy.dash
                    .select "#node-editor"
                    .remove()
-            alchemy.dash
+            Alchemy.dash
                    .select "#edge-editor"
                    .remove()
-            alchemy.dash
+            Alchemy.dash
                    .select "#node-add-prop-submit"
                    .attr "placeholder", ()->
-                       if alchemy.vis.selectAll(".selected").empty()
+                       if Alchemy.vis.selectAll(".selected").empty()
                            return "select a node or edge to edit properties"
                        return "add a property to this element"
 
         edgeEditor: (e) ->
-            divSelector = alchemy.conf.divSelector        
-            editor = alchemy.dash "#control-dash #editor"
+            divSelector = Alchemy.conf.divSelector        
+            editor = Alchemy.dash "#control-dash #editor"
             options = editor.select '#element-options'
             html = @elementEditorHTML "Edge"
             elementEditor = options.append 'div'
@@ -289,7 +289,7 @@
                                     .html html
 
             elementEditor.attr "class", () ->
-                        return "enabled" if alchemy.dash
+                        return "enabled" if Alchemy.dash
                                                    .select "#editor-interactions"
                                                    .classed "active"
                         "hidden"
@@ -302,8 +302,8 @@
                         .attr "placeholder", "New Property Value"
                         .attr "value", null
             
-            edgeProperties = alchemy._edges[e.id].getProperties()
-            alchemy.vis
+            edgeProperties = Alchemy._edges[e.id].getProperties()
+            Alchemy.vis
                    .select "#edge-#{e.id}"
                    .classed "editing":true
 
@@ -324,27 +324,27 @@
                                 .attr "class", "form-control property-value"
                                 .attr "value", "#{val}"
 
-            alchemy.dash
+            Alchemy.dash
                    .selectAll "#add-prop-key, #add-prop-value, .property"
                    .on "keydown", ->
                        if d3.event.keyCode is 13
                            event.preventDefault()
                        d3.select(@).classed {"edited-property":true}
 
-            alchemy.dash
+            Alchemy.dash
                 .select "#add-property-form"
                 .on "submit", ->
                     event.preventDefault()
-                    key = alchemy.dash
+                    key = Alchemy.dash
                                  .select "#add-prop-key"
                                  .property 'value'
                     key = key.replace /\s/g, "_"
-                    value = alchemy.dash
+                    value = Alchemy.dash
                                    .select "#add-prop-value"
                                    .property 'value'
                     updateProperty key, value, true
 
-                    alchemy.dash
+                    Alchemy.dash
                            .selectAll "#add-property .edited-property"
                            .classed "edited-property":false
                     @reset()
@@ -352,14 +352,14 @@
             d3.select "#properties-list"
                 .on "submit", -> 
                     event.preventDefault()
-                    properties = alchemy.dash.selectAll ".edited-property"
+                    properties = Alchemy.dash.selectAll ".edited-property"
                     for property in properties[0]
-                        selection = alchemy.dash.select property
+                        selection = Alchemy.dash.select property
                         key = selection.select("label").text()
                         value = selection.select("input").property 'value'
                         updateProperty key, value, false
 
-                    alchemy.dash
+                    Alchemy.dash
                            .selectAll "#properties-list .edited-property"
                            .classed "edited-property":false
                     @reset()
@@ -367,31 +367,31 @@
             updateProperty = (key, value, newProperty) ->
                 edgeID = e.id
                 if (key!="") and (value != "")
-                    alchemy._edges[edgeID].setProperty "#{key}", "#{value}"
-                    edgeSelection = alchemy.vis.select "#edge-#{edgeID}"
-                    drawEdges = new alchemy.drawing.DrawEdges
-                    drawEdges.updateEdge alchemy.vis.select("#edge-#{edgeID}")
+                    Alchemy._edges[edgeID].setProperty "#{key}", "#{value}"
+                    edgeSelection = Alchemy.vis.select "#edge-#{edgeID}"
+                    drawEdges = new Alchemy.drawing.DrawEdges
+                    drawEdges.updateEdge Alchemy.vis.select("#edge-#{edgeID}")
                     if newProperty is true 
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#add-prop-key"
                                .attr "value", "property added/updated to key: #{key}"
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#add-prop-value"
                                .attr "value", "property at #{key} updated to: #{value}"
                     else
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#edge-#{key}-input"
                                .attr "value", "property at #{key} updated to: #{value}"
 
                 else
                     if newProperty is true 
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#add-prop-key"
                                .attr "value", "null or invalid input"
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#add-prop-value"
                                .attr "value", "null or invlid input"
                     else
-                        alchemy.dash
+                        Alchemy.dash
                                .select "#edge-#{key}-input"
                                .attr "value", "null or invalid input"

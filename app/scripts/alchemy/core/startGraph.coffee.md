@@ -13,64 +13,63 @@
 
     # You should have received a copy of the GNU Affero General Public License
     # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    alchemy.startGraph = (data) =>
-        conf = alchemy.conf
+    Alchemy.startGraph = (data) =>
+        conf = Alchemy.conf
 
         if d3.select(conf.divSelector).empty()
-            console.warn alchemy.utils.warnings.divWarning()
+            console.warn Alchemy.utils.warnings.divWarning()
 
         # see if data is ok
         if not data
-            alchemy.utils.warnings.dataWarning()
+            Alchemy.utils.warnings.dataWarning()
 
         # create nodes map and update links
-        alchemy.create.nodes.apply @, data.nodes
+        Alchemy.create.nodes.apply @, data.nodes
 
         data.edges.forEach (e) ->
-            alchemy.create.edges e
+            Alchemy.create.edges e
 
         # create SVG
-        alchemy.vis = d3.select conf.divSelector
+        Alchemy.vis = d3.select conf.divSelector
             .attr "style", "width:#{conf.graphWidth()}px; height:#{conf.graphHeight()}px; background:#{conf.backgroundColour}"
             .append "svg"
                 .attr "xmlns", "http://www.w3.org/2000/svg"
                 .attr "xlink", "http://www.w3.org/1999/xlink"
                 .attr "pointer-events", "all"
-                .on 'click', alchemy.interactions.deselectAll
-                .call alchemy.interactions.zoom(conf.scaleExtent)
+                .on 'click', Alchemy.interactions.deselectAll
+                .call Alchemy.interactions.zoom(conf.scaleExtent)
                 .on "dblclick.zoom", null
                 .append 'g'
                     .attr "transform","translate(#{conf.initialTranslate}) scale(#{conf.initialScale})"
 
-        alchemy.generateLayout()
-        alchemy.controlDash.init()
+        Alchemy.generateLayout()
+        Alchemy.controlDash.init()
 
         #enter/exit nodes/edges
-        d3Edges = _.flatten _.map(alchemy._edges, (edgeArray) -> e._d3 for e in edgeArray)
-        d3Nodes = _.map alchemy._nodes, (n) -> n._d3
+        d3Edges = _.flatten _.map(Alchemy._edges, (edgeArray) -> e._d3 for e in edgeArray)
+        d3Nodes = _.map Alchemy._nodes, (n) -> n._d3
 
         # if start
-        alchemy.layout.positionRootNodes()
-        alchemy.force.start()
-        while alchemy.force.alpha() > 0.005
-            alchemy.force.tick()
+        Alchemy.layout.positionRootNodes()
+        Alchemy.force.start()
+        while Alchemy.force.alpha() > 0.005
+            Alchemy.force.tick()
 
-        alchemy._drawEdges = alchemy.drawing.DrawEdges
-        alchemy._drawEdges.createEdge d3Edges
-        alchemy._drawNodes = alchemy.drawing.DrawNodes
-        alchemy._drawNodes.createNode d3Nodes
+        Alchemy._drawEdges = Alchemy.drawing.DrawEdges
+        Alchemy._drawEdges.createEdge d3Edges
+        Alchemy._drawNodes = Alchemy.drawing.DrawNodes
+        Alchemy._drawNodes.createNode d3Nodes
 
         initialComputationDone = true
         console.log Date() + ' completed initial computation'
 
-        nodes = alchemy.vis.selectAll 'g.node'
+        nodes = Alchemy.vis.selectAll 'g.node'
                         .attr 'transform', (id, i) -> "translate(#{id.x}, #{id.y})"
 
         # configuration for forceLocked
         if !conf.forceLocked
-            alchemy.force
-                    .on "tick", alchemy.layout.tick
+            Alchemy.force
+                    .on "tick", Alchemy.layout.tick
                     .start()
 
         # call user-specified functions after load function if specified
@@ -79,18 +78,18 @@
             if typeof conf.afterLoad is 'function'
                 conf.afterLoad()
             else if typeof conf.afterLoad is 'string'
-                alchemy[conf.afterLoad] = true
+                Alchemy[conf.afterLoad] = true
 
-        if conf.initialScale isnt alchemy.defaults.initialScale
-            alchemy.interactions.zoom().scale conf.initialScale
+        if conf.initialScale isnt Alchemy.defaults.initialScale
+            Alchemy.interactions.zoom().scale conf.initialScale
             return
 
-        if conf.initialTranslate isnt alchemy.defaults.initialTranslate
-            alchemy.interactions.zoom().translate conf.initialTranslate
+        if conf.initialTranslate isnt Alchemy.defaults.initialTranslate
+            Alchemy.interactions.zoom().translate conf.initialTranslate
             return
 
         if conf.cluster or conf.directedEdges
-            defs = d3.select("#{alchemy.conf.divSelector} svg").append "svg:defs"
+            defs = d3.select("#{Alchemy.conf.divSelector} svg").append "svg:defs"
 
         if conf.directedEdges
             arrowSize = conf.edgeArrowSize + (conf.edgeWidth() * 2)
@@ -109,9 +108,10 @@
                 marker.attr 'refX', 1
 
         if conf.showEditor
-            editor = new alchemy.editor.Editor
-            editorInteractions = new alchemy.editor.Interactions
+            editor = new Alchemy.editor.Editor
+            editorInteractions = new Alchemy.editor.Interactions
             d3.select "body"
                 .on 'keydown', editorInteractions.deleteSelected
 
             editor.startEditor()
+    debugger

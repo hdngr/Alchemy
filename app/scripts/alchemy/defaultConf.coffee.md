@@ -14,7 +14,7 @@
     # You should have received a copy of the GNU Affero General Public License
     # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    alchemy.defaults =
+    Alchemy.defaults =
 
         # Renderer
         renderer: "svg"
@@ -127,7 +127,7 @@
         backgroundColour: "#000000"
         theme: null
         afterLoad: 'afterLoad'
-        divSelector: '#alchemy'
+        divSelector: '#Alchemy'
         dataSource: null
         initialScale: 1
         initialTranslate: [0,0]
